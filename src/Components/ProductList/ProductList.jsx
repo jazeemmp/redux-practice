@@ -1,22 +1,43 @@
-import React, { useState } from "react";
-import "./ProductList.css";
+import React, { useEffect } from "react";
 import products from "../../api/products.json";
-import BeforeCart from './CartButtons/BeforeCart'
-import AfterCart from './CartButtons/AfterCart'
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartButtons from "./CartButtons";
+import { useGetTodosQuery } from "../../Redux/apiSlice";
+import "./ProductList.css";
+import { fetchTodos } from "../../Redux/Thunkapi";
+
 const ProductList = () => {
-  const {cartCount,cartList} = useSelector((state)=>state.cart)
-  console.log(cartList);
+  const dispatch = useDispatch()
+  const { cartCount, cartList } = useSelector((state) => state.cart);
+  const { todos = [],status,error } = useSelector((state) => state.todos)
+  useEffect(()=>{
+    dispatch(fetchTodos())
+  },[dispatch])
+  
+  if (status === 'loading') return <div>Loading...</div>;
+  if (status === 'failed') return <div>Error: {error}</div>;
+  console.log(todos);
+ 
   return (
     <section className="container">
-      {products?.map((product, i) => (
-        <div className="product-container" key={i}>
-          <img src={product.image} alt="" />
+      {products?.map((product) => (
+        <div className="product-container" key={product.id || product.title}> 
+          <img src={product.image} alt={product.title} />
           <h3>{product.title}</h3>
-          <CartButtons product={product}/>
+          <CartButtons product={product} />
         </div>
       ))}
+
+      {todos && (
+        <div>
+          <h2>Todos:</h2>
+          <ul>
+            {todos.map((todo) => (
+              <li key={todo.id}>{todo.title}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 };

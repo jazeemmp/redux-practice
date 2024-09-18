@@ -7,3 +7,34 @@ header .container{
     align-items: center;
     justify-content: space-between;
 }
+
+header .cart-count-header {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff398f;
+    border-radius: 50%;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+}
+
+header .right-section {
+    position: relative;
+}
+@keyframes bounce {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+  }
+  
+  .cart-count-header.bounce {
+      animation: bounce 0.5s ease-in-out;
+  }
+  

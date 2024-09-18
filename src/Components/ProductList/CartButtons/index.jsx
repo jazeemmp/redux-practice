@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import AfterCart from './AfterCart'
 import BeforeCart from './BeforeCart'
 
 const CartButtons = ({product}) => {
   const {cartList } = useSelector((state)=> state.cart)
-  const cartCount = cartList.find((item)=> item.id === product?.id)?.count
+
+  const cartCount = useMemo(()=>{
+   return cartList.find((item)=> item.id === product?.id)?.count
+  },[cartList])
+  
   return (
     <>
-     {cartCount >0 ? <AfterCart cartCount={cartCount} product={product}/> : <BeforeCart product={product}/>}
+     {cartCount >0 ? <AfterCart cartCount={cartCount} productId={product.id}/> : <BeforeCart product={product}/>}
     </>
   )
 }
